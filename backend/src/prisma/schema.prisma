@@ -8,21 +8,37 @@ datasource db {
 }
 
 model Users {
-  id        String   @id @default(uuid())
-  loginId   String   @unique
-  email     String   @unique
-  password  String
-  role      String   @default("staff") // manager or staff
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String    @id @default(uuid())
+  loginId           String    @unique
+  email             String    @unique
+  password          String
+  role              String    @default("staff")
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  resetOtp          String?     // stores OTP
+  resetOtpExpiresAt DateTime?   // OTP timeout
 }
+
+
+model Otp {
+  id         String   @id @default(uuid())
+  email      String
+  code       String
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime
+}
+
+
+
+
 
 model products {
   id         String   @id @default(uuid())
   name       String
-  sku        String   @unique // unique product code
+  sku        String   @unique
   category   String
-  unit       String // unit of measure
+  unit       String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
@@ -30,8 +46,20 @@ model products {
 model warehouses {
   id         String   @id @default(uuid())
   name       String
-  shortCode  String   @unique // 2–3 uppercase letters (e.g., WH, MNL)
+  shortCode  String   @unique
   address    String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  locations  locations[]
+}
+
+model locations {
+  id           String     @id @default(uuid())
+  name         String
+  shortCode    String     @unique
+  warehouseId  String
+  warehouse    warehouses @relation(fields: [warehouseId], references: [id])
+  created_at   DateTime   @default(now())
+  updated_at   DateTime   @updatedAt
 }

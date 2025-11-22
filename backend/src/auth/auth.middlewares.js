@@ -16,7 +16,6 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-// Only managers allowed
 const isManager = (req, res, next) => {
   if (req.user.role !== 'manager') {
     return res.status(403).json({ message: 'Forbidden: Managers only' });
