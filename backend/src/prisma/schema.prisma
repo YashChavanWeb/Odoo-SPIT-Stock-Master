@@ -7,6 +7,7 @@ datasource db {
   provider = "postgresql"
 }
 
+// Users model
 model Users {
   id        String   @id @default(uuid())
   loginId   String   @unique
@@ -17,21 +18,41 @@ model Users {
   updatedAt DateTime @updatedAt
 }
 
-model products {
+model Products {
+  id         String     @id @default(uuid())
+  name       String
+  sku        String     @unique
+  category   String
+  unit       String
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  receipts   Receipts[] @relation("ReceiptProducts")
+}
+
+model Warehouses {
   id         String   @id @default(uuid())
   name       String
-  sku        String   @unique // unique product code
-  category   String
-  unit       String // unit of measure
+  shortCode  String   @unique
+  address    String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
 
-model warehouses {
-  id         String   @id @default(uuid())
-  name       String
-  shortCode  String   @unique // 2–3 uppercase letters (e.g., WH, MNL)
-  address    String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+model Receipts {
+  id         String        @id @default(uuid())
+  reference  String        @unique
+  from       String
+  to         String
+  contact    String
+  schedule   DateTime
+  status     ReceiptStatus
+  created_at DateTime      @default(now())
+  updated_at DateTime      @updatedAt
+  products   Products[]    @relation("ReceiptProducts")
+}
+
+enum ReceiptStatus {
+  draft
+  ready
+  done
 }
