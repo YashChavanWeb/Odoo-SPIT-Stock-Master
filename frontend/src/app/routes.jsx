@@ -15,7 +15,7 @@ const DeliveryView = lazy(() => import('../features/dashboard/views/DeliveryView
 // const AdjustmentView = lazy(() => import('../features/dashboard/views/AdjustmentView'));
 
 // const StockPage = lazy(() => import('../features/stock/pages/StockPage'));
-// const MoveHistoryPage = lazy(() => import('../features/moveHistory/pages/MoveHistoryPage'));
+const MoveHistoryPage = lazy(() => import('../features/dashboard/pages/MoveHistory'));
 
 const WarehouseSettings = lazy(() => import('../features/dashboard/components/Warehouse'));
 const LocationSettings = lazy(() => import('../features/dashboard/components/Location'));
@@ -43,7 +43,7 @@ export const protectedRoutes = [
   // { path: '/dashboard/stock', element: <StockPage /> },
 
   // // Move history
-  // { path: '/dashboard/move-history', element: <MoveHistoryPage /> },
+  { path: '/dashboard/move-history', element: <MoveHistoryPage /> },
 
   // // Settings
   { path: '/dashboard/settings/warehouses', element: <WarehouseSettings /> },
