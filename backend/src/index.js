@@ -11,6 +11,7 @@ import authRouter from './auth/auth.route.js';
 import userRouter from './users/user.routes.js';
 import productRouter from './products/product.route.js';
 import warehouseRouter from './warehouses/warehouse.routes.js';
+import receiptRouter from './receipts/receipt.routes.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -41,6 +42,7 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/products', productRouter);
 app.use('/api/v1/warehouse', warehouseRouter);
+app.use('/api/v1/receipts', receiptRouter);
 
 app.listen(port, async () => {
   console.log(`Backend is running on port: ${port}`);

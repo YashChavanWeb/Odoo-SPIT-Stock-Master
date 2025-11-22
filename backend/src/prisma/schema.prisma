@@ -7,13 +7,12 @@ datasource db {
   provider = "postgresql"
 }
 
-// Users model
 model Users {
   id        String   @id @default(uuid())
   loginId   String   @unique
   email     String   @unique
   password  String
-  role      String   @default("staff") // manager or staff
+  role      String   @default("staff")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -39,16 +38,24 @@ model Warehouses {
 }
 
 model Receipts {
-  id         String        @id @default(uuid())
-  reference  String        @unique
-  from       String
-  to         String
-  contact    String
-  schedule   DateTime
-  status     ReceiptStatus
-  created_at DateTime      @default(now())
-  updated_at DateTime      @updatedAt
-  products   Products[]    @relation("ReceiptProducts")
+  id            String        @id @default(uuid())
+  operationType OperationType
+  reference     String        @unique
+  from          String
+  to            String
+  contact       String
+  schedule      DateTime
+  status        ReceiptStatus
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+  products      Products[]    @relation("ReceiptProducts")
+}
+
+// New Enum definition
+enum OperationType {
+  Receipt
+  Delivery
+  Adjustment
 }
 
 enum ReceiptStatus {
