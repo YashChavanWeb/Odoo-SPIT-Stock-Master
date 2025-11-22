@@ -1,6 +1,5 @@
 import { prisma } from '../utils/prisma.js';
 
-// Create a new receipt
 export const createReceipt = async (req, res) => {
   try {
     const {
@@ -10,7 +9,7 @@ export const createReceipt = async (req, res) => {
       to,
       contact,
       schedule,
-      products,
+      products, // [{ productId, quantity }, ...]
       status,
     } = req.body;
 
@@ -21,11 +20,17 @@ export const createReceipt = async (req, res) => {
       !to ||
       !contact ||
       !schedule ||
-      !products
+      !products ||
+      !Array.isArray(products)
     ) {
-      return res.status(400).json({ message: 'Missing required fields' });
+      return res
+        .status(400)
+        .json({
+          message: 'Missing required fields or invalid products format',
+        });
     }
 
+    // Create the receipt and connect products (ignoring quantity in relation for now)
     const newReceipt = await prisma.receipts.create({
       data: {
         operationType,
@@ -34,17 +39,47 @@ export const createReceipt = async (req, res) => {
         to,
         contact,
         schedule,
-        status: status || 'draft', // Default status is 'draft'
+        status: status || 'draft',
         products: {
-          connect: products.map((productId) => ({ id: productId })), // Assuming `products` is an array of product IDs
+          connect: products.map((p) => ({ id: p.productId })),
         },
       },
     });
 
+    // Update stock for each product
+    for (const item of products) {
+      const existingStock = await prisma.stock.findUnique({
+        where: { productId: item.productId },
+      });
+
+      if (existingStock) {
+        // Update stock quantities
+        await prisma.stock.update({
+          where: { id: existingStock.id },
+          data: {
+            quantity: existingStock.quantity + item.quantity,
+            onHand: existingStock.onHand + item.quantity,
+            freeToUse: existingStock.freeToUse + item.quantity,
+          },
+        });
+      } else {
+        // Create new stock entry
+        await prisma.stock.create({
+          data: {
+            productId: item.productId,
+            quantity: item.quantity,
+            onHand: item.quantity,
+            freeToUse: item.quantity,
+            perUnitCost: 0, // can be updated later
+          },
+        });
+      }
+    }
+
     return res.status(201).json(newReceipt);
   } catch (error) {
     console.error('Error creating receipt:', error);
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error' });
   }
 };
 
