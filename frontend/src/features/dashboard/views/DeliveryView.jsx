@@ -3,6 +3,7 @@ import Button from '../../../components/ui/Button';
 import TableView from '../components/TableView';
 import KanbanView from '../components/KanbanView';
 import SearchBar from '../../../components/ui/SearchBar';
+import DeliveryDetail from '../components/delivery/DeliveryDetail';
 import Tooltip from '@mui/material/Tooltip';
 
 const sampleData = [
@@ -13,6 +14,7 @@ const sampleData = [
 const DeliveryView = ({ onBack }) => {
   const [viewMode, setViewMode] = useState('list');
   const [search, setSearch] = useState('');
+  const [selectedDelivery, setSelectedDelivery] = useState(null); // NEW
 
   const filteredData = sampleData.filter(d =>
     d.reference.toLowerCase().includes(search.toLowerCase()) ||
@@ -20,6 +22,11 @@ const DeliveryView = ({ onBack }) => {
     d.to.toLowerCase().includes(search.toLowerCase()) ||
     d.contact.toLowerCase().includes(search.toLowerCase())
   );
+
+  // If a row is clicked, show the detail page
+  if (selectedDelivery) {
+    return <DeliveryDetail delivery={selectedDelivery} onBack={() => setSelectedDelivery(null)} />;
+  }
 
   return (
     <div className="space-y-4">
@@ -34,13 +41,12 @@ const DeliveryView = ({ onBack }) => {
         <div className="flex gap-2 items-center">
           <SearchBar value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by reference/contact..." />
 
-          <Tooltip title="Switch to Kanban view" arrow>  
+          <Tooltip title="Switch to List view" arrow>  
             <Button
               onClick={() => setViewMode('list')}
               variant={viewMode === 'list' ? 'contained' : 'outlined'}
             >
               <ion-icon name="list-outline" size='large' class="mr-1 dark:text-yellow-300 text-yellow-800"></ion-icon>
-              {/* List */}
             </Button>
           </Tooltip>
 
@@ -50,13 +56,19 @@ const DeliveryView = ({ onBack }) => {
               variant={viewMode === 'kanban' ? 'contained' : 'outlined'}
             >
               <ion-icon name="calendar-clear-outline" size='large' class="mr-1 dark:text-yellow-300 text-yellow-800"></ion-icon>
-              {/* Kanban */}
             </Button>           
           </Tooltip>
         </div>
       </div>
 
-      {viewMode === 'list' ? <TableView data={filteredData} /> : <KanbanView data={filteredData} />}
+      {viewMode === 'list' ? (
+        <TableView 
+          data={filteredData} 
+          onRowClick={(row) => setSelectedDelivery(row)} // PASS THE HANDLER
+        />
+      ) : (
+        <KanbanView data={filteredData} />
+      )}
     </div>
   );
 };
