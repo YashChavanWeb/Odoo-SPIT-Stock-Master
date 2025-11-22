@@ -23,11 +23,9 @@ export const createReceipt = async (req, res) => {
       !products ||
       !Array.isArray(products)
     ) {
-      return res
-        .status(400)
-        .json({
-          message: 'Missing required fields or invalid products format',
-        });
+      return res.status(400).json({
+        message: 'Missing required fields or invalid products format',
+      });
     }
 
     // Create the receipt and connect products (ignoring quantity in relation for now)
@@ -48,8 +46,8 @@ export const createReceipt = async (req, res) => {
 
     // Update stock for each product
     for (const item of products) {
-      const existingStock = await prisma.stock.findUnique({
-        where: { productId: item.productId },
+      const existingStock = await prisma.stock.findFirst({
+        where: { productId: item.productId }, // Find stock based on productId
       });
 
       if (existingStock) {
@@ -63,14 +61,14 @@ export const createReceipt = async (req, res) => {
           },
         });
       } else {
-        // Create new stock entry
+        // Create new stock entry if not found
         await prisma.stock.create({
           data: {
             productId: item.productId,
             quantity: item.quantity,
             onHand: item.quantity,
             freeToUse: item.quantity,
-            perUnitCost: 0, // can be updated later
+            perUnitCost: 0, // Can be updated later
           },
         });
       }
