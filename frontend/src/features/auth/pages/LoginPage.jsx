@@ -1,10 +1,12 @@
-import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import Card from '../../../components/ui/Card';
 import Input from '../../../components/ui/Input';
 import Button from '../../../components/ui/Button';
 import Toast from '../../../components/ui/Toast';
+import LogoImage from '../../../components/ui/Logo.png';
 import { useAuth } from '../../../context/AuthContext';
+import { APP_NAME } from '../../../constants';
 
 const LoginPage = () => {
   const { login, loading } = useAuth();
@@ -12,42 +14,61 @@ const LoginPage = () => {
   const location = useLocation();
   const redirectPath = location.state?.from?.pathname || '/dashboard';
 
-  const [values, setValues] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState({ loginId: '', password: '' });
   const [toast, setToast] = useState({ open: false, message: '', severity: 'success' });
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setValues((prev) => ({ ...prev, [name]: value }));
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const result = await login(values);
-    if (result.success) {
-      setToast({ open: true, message: 'Welcome back!', severity: 'success' });
-      navigate(redirectPath, { replace: true });
-    } else {
-      setToast({ open: true, message: 'Login failed. Try again.', severity: 'error' });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const result = await login({
+        email: formData.loginId.includes('@') ? formData.loginId : `${formData.loginId}@inventory.com`,
+        password: formData.password,
+      });
+
+      if (result.success) {
+        setToast({ open: true, message: 'Welcome back!', severity: 'success' });
+        navigate(redirectPath, { replace: true });
+      } else {
+        setToast({ open: true, message: 'Invalid login credentials.', severity: 'error' });
+      }
+    } catch (err) {
+      setToast({ open: true, message: 'An error occurred. Please try again.', severity: 'error' });
     }
   };
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
       <Card>
-        <div className="space-y-2 text-center">
-          <p className="text-sm font-semibold text-brand-500">Login</p>
+        {/* Logo + Heading */}
+        <div className="flex flex-col items-center space-y-2 mb-4">
+          <img src={LogoImage} alt="Logo" className="w-[70px] h-[70px]" />
           <h1 className="text-3xl font-semibold">Welcome back</h1>
-          <p className="text-muted text-sm">
-            Access your workspace and manage your hackathon squad in one place.
+          <p className="text-sm text-muted text-center">
+            Access your workspace and manage your {APP_NAME} in one place.
           </p>
         </div>
+
+        {/* Form */}
         <form className="space-y-4" onSubmit={handleSubmit}>
           <Input
-            label="Email"
-            name="email"
-            type="email"
+            label="Login ID or Email"
+            name="loginId"
+            type="text"
             required
-            value={values.email}
+            value={formData.loginId}
             onChange={handleChange}
           />
           <Input
@@ -55,20 +76,24 @@ const LoginPage = () => {
             name="password"
             type="password"
             required
-            value={values.password}
+            value={formData.password}
             onChange={handleChange}
           />
           <Button type="submit" loading={loading} fullWidth>
             Sign in
           </Button>
         </form>
-        <p className="text-center text-sm text-muted">
-          No account yet?{' '}
-          <a href="/signup" className="text-brand-500 font-medium">
-            Create one
-          </a>
-        </p>
+
+        <div className="mt-4 flex justify-between text-sm">
+          <Link to="/forgot-password" className="text-primary hover:underline">
+            Forgot Password?
+          </Link>
+          <Link to="/signup" className="text-primary hover:underline font-semibold">
+            Sign Up
+          </Link>
+        </div>
       </Card>
+
       <Toast
         open={toast.open}
         message={toast.message}
@@ -80,4 +105,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-

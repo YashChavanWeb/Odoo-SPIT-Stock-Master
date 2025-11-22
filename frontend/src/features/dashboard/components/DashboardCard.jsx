@@ -10,14 +10,13 @@ const DashboardCard = ({ title, highlightCount, stats, onClick }) => {
       onClick={onClick}
     >
       <div className="flex justify-between items-center">
-        <h3 className="text-xl font-semibold">{title}</h3>
-        {/* Use ion-icon as a normal HTML tag */}
-        <ion-icon name={iconName} class="text-yellow-500 text-3xl"></ion-icon>
+        <h3 className="text-3xl font-bold dark:text-yellow-200 text-yellow-600 border-b-1 border-gray-400">{title}</h3>
+        <ion-icon name={iconName} size='large' class="text-yellow-500 text-3xl"></ion-icon>
       </div>
-      <p className="text-3xl font-bold my-2">{highlightCount}</p>
+      <p className="text-3xl font-semibold my-2">Total : {highlightCount}</p>
       <div className="flex gap-4 text-sm text-gray-400">
         {Object.entries(stats).map(([key, value]) => (
-          <span key={key}>
+          <span key={key} className='p-2 px-5 dark:bg-gray-700 bg-gray-400 rounded-full text-xl dark:text-gray-200 text-black'>
             {value} {key}
           </span>
         ))}
