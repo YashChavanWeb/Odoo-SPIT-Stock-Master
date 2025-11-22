@@ -14,8 +14,8 @@ const DashboardPage = () => {
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Dashboard</h1>
-      <Grid container spacing={6} className="w-full">
-        <Grid item xs={12} sm={12} md={6} className="flex">
+      <Grid size={12} container spacing={3} className="w-full">
+        <Grid item xs={12} sm={12} md={6} size={6} className="flex">
           <DashboardCard
             title="Receipts"
             highlightCount={4}
@@ -23,7 +23,7 @@ const DashboardPage = () => {
             onClick={() => setActiveView('receipts')}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} className="flex">
+        <Grid item xs={12} sm={12} md={6} size={6} className="flex">
           <DashboardCard
             title="Delivery"
             highlightCount={4}

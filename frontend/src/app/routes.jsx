@@ -10,13 +10,14 @@ const SignupPage = lazy(() => import('../features/auth/pages/SignupPage'));
 const DashboardPage = lazy(() => import('../features/dashboard/pages/DashboardPage'));
 const ReceiptsView = lazy(() => import('../features/dashboard/views/ReceiptsView'));
 const DeliveryView = lazy(() => import('../features/dashboard/views/DeliveryView'));
+
 // const AdjustmentView = lazy(() => import('../features/dashboard/views/AdjustmentView'));
 
 // const StockPage = lazy(() => import('../features/stock/pages/StockPage'));
 // const MoveHistoryPage = lazy(() => import('../features/moveHistory/pages/MoveHistoryPage'));
 
-// const WarehouseSettings = lazy(() => import('../features/settings/pages/WarehouseSettings'));
-// const LocationSettings = lazy(() => import('../features/settings/pages/LocationSettings'));
+const WarehouseSettings = lazy(() => import('../features/dashboard/components/Warehouse'));
+const LocationSettings = lazy(() => import('../features/dashboard/components/Location'));
 
 // const AccountPage = lazy(() => import('../features/account/pages/AccountPage'));
 
@@ -43,8 +44,8 @@ export const protectedRoutes = [
   // { path: '/dashboard/move-history', element: <MoveHistoryPage /> },
 
   // // Settings
-  // { path: '/dashboard/settings/warehouses', element: <WarehouseSettings /> },
-  // { path: '/dashboard/settings/locations', element: <LocationSettings /> },
+  { path: '/dashboard/settings/warehouses', element: <WarehouseSettings /> },
+  { path: '/dashboard/settings/locations', element: <LocationSettings /> },
 
   // // Account
   // { path: '/dashboard/account', element: <AccountPage /> },
