@@ -25,6 +25,7 @@ export const publicRoutes = [
   { path: '/', element: <LandingPage /> },
   { path: '/login', element: <LoginPage /> },
   { path: '/signup', element: <SignupPage /> },
+
 ];
 
 // Protected routes
