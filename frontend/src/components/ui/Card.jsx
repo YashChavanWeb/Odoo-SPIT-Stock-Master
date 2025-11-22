@@ -5,7 +5,7 @@ import clsx from 'clsx';
 const Card = ({ children, className, padding = 'p-6', ...props }) => (
   <MuiCard
     className={clsx(
-      'bg-white dark:bg-slate-800 shadow-soft border border-slate-100 dark:border-slate-700',
+      ' shadow-soft border border-slate-100 dark:border-slate-700',
       className,
     )}
     elevation={0}

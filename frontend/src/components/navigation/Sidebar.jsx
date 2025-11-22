@@ -26,7 +26,7 @@ const Sidebar = ({ links = [] }) => {
   const location = useLocation();
 
   const renderList = () => (
-    <div className="w-64 bg-white dark:bg-slate-900 h-full flex flex-col">
+    <div className="w-64 h-full flex flex-col">
       <div className="px-4 py-6 text-xl font-semibold text-brand-500">{APP_NAME}</div>
       <List>
         {links.map((link) => (
