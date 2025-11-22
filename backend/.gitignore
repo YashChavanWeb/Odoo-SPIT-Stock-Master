@@ -1,11 +1,6 @@
 .env
 node_modules
 
+/src/prisma/migrations
+/src/generated/prisma
 
-/generated/prisma
-
-/generated/prisma
-
-/generated/prisma
-
-/generated/prisma

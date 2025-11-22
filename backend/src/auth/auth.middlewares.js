@@ -16,11 +16,12 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-const isAdmin = (req, res, next) => {
-  if (req.user.role !== 'admin') {
-    return res.status(403).json({ message: 'Forbidden: Admins only' });
+// Only managers allowed
+const isManager = (req, res, next) => {
+  if (req.user.role !== 'manager') {
+    return res.status(403).json({ message: 'Forbidden: Managers only' });
   }
   next();
 };
 
-export { authMiddleware, isAdmin };
+export { authMiddleware, isManager };
