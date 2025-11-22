@@ -2,97 +2,173 @@ import { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from '@mui/icons-material/Menu';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import Button from '../ui/Button';
-import { NAV_LINKS, APP_NAME } from '../../constants';
-import { useAuth } from '../../context/AuthContext';
+import { Link } from 'react-router-dom';
 import { useThemeMode } from '../../context/ThemeContext';
+import { useAuth } from '../../context/AuthContext';
+
+const NavLink = ({ to, label }) => {
+  const { mode } = useThemeMode();
+  return (
+    <Link
+      to={to}
+      className={`text-sm px-3 py-2 transition ${
+        mode === 'dark'
+          ? 'text-yellow-300 hover:text-yellow-200'
+          : 'text-yellow-800 hover:text-yellow-600'
+      }`}
+    >
+      {label}
+    </Link>
+  );
+};
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { user, isAuthenticated, logout } = useAuth();
+  const [opsMenu, setOpsMenu] = useState(null);
+  const [settingsMenu, setSettingsMenu] = useState(null);
+  const [accountMenu, setAccountMenu] = useState(null);
+
   const { mode, toggleTheme } = useThemeMode();
+  const { user, isAuthenticated, logout } = useAuth();
 
   return (
     <AppBar
       position="sticky"
       color="transparent"
       elevation={0}
-      className="backdrop-blur-lg border-b border-transparent"
+      className={
+        mode === 'dark'
+          ? 'bg-black backdrop-blur-lg border-b border-gray-800'
+          : 'bg-neutral-800/90 backdrop-blur-lg border-b border-gray-900'
+      }
     >
-      <Toolbar className="flex justify-between gap-4 py-4">
-        <div className="flex items-center gap-3">
+      <Toolbar className="flex justify-between">
+
+        {/* LEFT */}
+        <div className="flex items-center gap-4">
           <IconButton className="md:hidden" onClick={() => setMobileOpen(true)}>
             <MenuIcon />
           </IconButton>
-          <span className="text-xl font-semibold text-brand-600">{APP_NAME}</span>
+
+          <Link
+            to="/dashboard"
+            className={`text-xl font-bold ${
+              mode === 'dark' ? 'text-yellow-300' : 'text-yellow-800'
+            }`}
+          >
+            IMS
+          </Link>
+
+          {/* Desktop Nav */}
+          <div
+            className={`hidden md:flex items-center gap-4`}
+          >
+            <NavLink to="/dashboard" label="Dashboard" />
+
+            {/* OPERATIONS DROPDOWN */}
+            <button
+              onClick={(e) => setOpsMenu(e.currentTarget)}
+              className={`text-sm px-3 py-2 transition ${
+                mode === 'dark'
+                  ? 'text-yellow-300 hover:text-yellow-200'
+                  : 'text-yellow-800 hover:text-yellow-600'
+              }`}
+            >
+              Operations
+            </button>
+            <Menu
+              anchorEl={opsMenu}
+              open={Boolean(opsMenu)}
+              onClose={() => setOpsMenu(null)}
+            >
+              <MenuItem component={Link} to="/dashboard/receipts">Receipts</MenuItem>
+              <MenuItem component={Link} to="/dashboard/delivery">Delivery</MenuItem>
+              <MenuItem component={Link} to="/dashboard/adjustment">Adjustment</MenuItem>
+            </Menu>
+
+            <NavLink to="/dashboard/stock" label="Stock" />
+            <NavLink to="/dashboard/move-history" label="Move History" />
+
+            {/* SETTINGS DROPDOWN */}
+            <button
+              onClick={(e) => setSettingsMenu(e.currentTarget)}
+              className={`text-sm px-3 py-2 transition ${
+                mode === 'dark'
+                  ? 'text-yellow-300 hover:text-yellow-200'
+                  : 'text-yellow-800 hover:text-yellow-600'
+              }`}
+            >
+              Settings
+            </button>
+            <Menu
+              anchorEl={settingsMenu}
+              open={Boolean(settingsMenu)}
+              onClose={() => setSettingsMenu(null)}
+            >
+              <MenuItem component={Link} to="/dashboard/settings/warehouses">Warehouses</MenuItem>
+              <MenuItem component={Link} to="/dashboard/settings/locations">Locations</MenuItem>
+            </Menu>
+
+            {/* <NavLink to="/dashboard/account" label="Account" /> */}
+          </div>
         </div>
-        <nav className="hidden md:flex items-center gap-6 text-sm text-muted">
-          {NAV_LINKS.map((link) => (
-            <a key={link.label} href={link.href} className="hover:text-brand-500 transition">
-              {link.label}
-            </a>
-          ))}
-        </nav>
-        <div className="flex items-center gap-2">
+
+        {/* RIGHT */}
+        <div className="flex items-center gap-3">
+
+          {/* THEME TOGGLE */}
           <IconButton onClick={toggleTheme} color="primary">
             {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
+
           {isAuthenticated ? (
             <>
-              <span className="hidden sm:block text-sm font-medium text-muted">
-                {user?.name}
-              </span>
-              <Button variant="ghost" onClick={logout}>
-                Logout
-              </Button>
+              {/* PROFILE ICON WITH DROPDOWN */}
+              <IconButton
+                onClick={(e) => setAccountMenu(e.currentTarget)}
+                className={`text-2xl transition ${
+                  mode === 'dark' ? 'text-yellow-300 hover:text-yellow-200' : 'text-yellow-800 hover:text-yellow-600'
+                }`}
+              >
+                <ion-icon name="person-circle-outline"></ion-icon>
+              </IconButton>
+              <Menu
+                anchorEl={accountMenu}
+                open={Boolean(accountMenu)}
+                onClose={() => setAccountMenu(null)}
+              >
+                <MenuItem component={Link} to="/dashboard/account">Account</MenuItem>
+                <MenuItem onClick={logout}>Logout</MenuItem>
+              </Menu>
             </>
           ) : (
             <>
-              <Button variant="ghost" size="sm" href="/login">
+              <Link
+                to="/login"
+                className={`text-sm transition ${
+                  mode === 'dark' ? 'text-yellow-300 hover:text-yellow-200' : 'text-yellow-800 hover:text-yellow-600'
+                }`}
+              >
                 Login
-              </Button>
-              <Button size="sm" href="/signup">
+              </Link>
+              <Link
+                to="/signup"
+                className="text-sm px-3 py-2 bg-yellow-500 text-black rounded-md hover:bg-yellow-600 transition"
+              >
                 Get Started
-              </Button>
+              </Link>
             </>
           )}
         </div>
+
       </Toolbar>
-      <Drawer anchor="left" open={mobileOpen} onClose={() => setMobileOpen(false)}>
-        <div className="w-64 p-6 space-y-6">
-          <span className="text-lg font-semibold text-brand-500">{APP_NAME}</span>
-          <List>
-            {NAV_LINKS.map((link) => (
-              <ListItemButton key={link.label} component="a" href={link.href} onClick={() => setMobileOpen(false)}>
-                {link.label}
-              </ListItemButton>
-            ))}
-          </List>
-          {isAuthenticated ? (
-            <Button fullWidth onClick={logout}>
-              Logout
-            </Button>
-          ) : (
-            <div className="flex flex-col gap-3">
-              <Button variant="ghost" fullWidth href="/login" onClick={() => setMobileOpen(false)}>
-                Login
-              </Button>
-              <Button fullWidth href="/signup" onClick={() => setMobileOpen(false)}>
-                Get Started
-              </Button>
-            </div>
-          )}
-        </div>
-      </Drawer>
     </AppBar>
   );
 };
 
 export default Navbar;
-

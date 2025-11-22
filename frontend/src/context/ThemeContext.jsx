@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useMemo,
-  useState,
-  useEffect,
-  useCallback,
-} from 'react';
+import { createContext, useContext, useMemo, useState, useEffect, useCallback } from 'react';
 import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 
 const THEME_STORAGE_KEY = 'hackathon_theme';
@@ -51,34 +44,39 @@ export const ThemeProviderWrapper = ({ children }) => {
         palette: {
           mode,
           primary: {
-            main: '#1c7fe6',
+            main: '#FFD700',
           },
           secondary: {
-            main: '#0d61c2',
+            main: '#808080',
           },
           background: {
-            default: mode === 'dark' ? '#0f172a' : '#f8fafc',
-            paper: mode === 'dark' ? '#1e293b' : '#ffffff',
+            default: mode === 'dark' ? '#000000' : '#e5e5e5', // slightly darker grey
+            paper: mode === 'dark' ? '#1a1a1a' : '#fafafa', // lighter but not too white
+          },
+          text: {
+            primary: mode === 'dark' ? '#FFD700' : '#000000',
+            secondary: mode === 'dark' ? '#CCCCCC' : '#333333',
           },
         },
-        shape: {
-          borderRadius: 12,
-        },
+        shape: { borderRadius: 12 },
         typography: {
           fontFamily: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
         },
+        components: {
+          MuiButton: {
+            styleOverrides: {
+              root: {
+                textTransform: 'none',
+                borderRadius: 8,
+              },
+            },
+          },
+        },
       }),
-    [mode],
+    [mode]
   );
 
-  const value = useMemo(
-    () => ({
-      mode,
-      toggleTheme,
-      isDark: mode === 'dark',
-    }),
-    [mode, toggleTheme],
-  );
+  const value = useMemo(() => ({ mode, toggleTheme, isDark: mode === 'dark' }), [mode, toggleTheme]);
 
   return (
     <ThemeContext.Provider value={value}>
@@ -92,9 +90,6 @@ export const ThemeProviderWrapper = ({ children }) => {
 
 export const useThemeMode = () => {
   const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useThemeMode must be used within ThemeProviderWrapper');
-  }
+  if (!context) throw new Error('useThemeMode must be used within ThemeProviderWrapper');
   return context;
 };
-

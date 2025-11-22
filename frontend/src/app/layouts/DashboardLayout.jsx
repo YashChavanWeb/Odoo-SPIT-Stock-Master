@@ -1,11 +1,11 @@
 import { Outlet } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import Sidebar from '../../components/navigation/Sidebar';
-import { DASHBOARD_LINKS } from '../../constants';
+import Navbar from '../../components/navigation/Navbar';
 
 const DashboardLayout = () => (
-  <Box className="min-h-screen flex bg-slate-50 dark:bg-slate-900">
-    <Sidebar links={DASHBOARD_LINKS} />
+  <Box className="min-h-screen">
+    {/* <Sidebar links={DASHBOARD_LINKS} /> */}
+    <Navbar/>
     <Box component="main" className="flex-1 p-6 lg:p-10">
       <Outlet />
     </Box>
