@@ -98,7 +98,7 @@ export const createProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
-    const id = req.params;
+    const { id } = req.params;
     const { ...updates } = req.body;
 
     if (!id) {

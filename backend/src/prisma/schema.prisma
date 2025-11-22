@@ -16,3 +16,12 @@ model products {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
+
+model warehouses {
+  id         String   @id @default(uuid())
+  name       String
+  shortCode  String   @unique // 2–3 uppercase letters (e.g., WH, MNL)
+  address    String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}

@@ -44,3 +44,8 @@ export { Prisma }
  * 
  */
 export type products = Prisma.productsModel
+/**
+ * Model warehouses
+ * 
+ */
+export type warehouses = Prisma.warehousesModel
