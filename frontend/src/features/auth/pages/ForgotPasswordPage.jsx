@@ -7,6 +7,7 @@ import Toast from '../../../components/ui/Toast';
 import { useAuth } from '../../../context/AuthContext';
 
 const ForgotPasswordPage = () => {
+  // All context functions are correctly imported
   const { sendOTP, verifyOTP, resetPassword, loading } = useAuth();
   const navigate = useNavigate();
 
@@ -17,19 +18,24 @@ const ForgotPasswordPage = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [toast, setToast] = useState({ open: false, message: '', severity: 'success' });
 
+  // Function to show toast message
+  const showToast = (message, severity) => {
+    setToast({ open: true, message, severity });
+  };
+
   // Step 1: send OTP
   const handleSendOTP = async (e) => {
     e.preventDefault();
     try {
       const result = await sendOTP({ email });
       if (result.success) {
-        setToast({ open: true, message: 'OTP sent to your email', severity: 'success' });
+        showToast('OTP sent to your email', 'success');
         setStep(2);
       } else {
-        setToast({ open: true, message: 'Failed to send OTP', severity: 'error' });
+        showToast(result.message || 'Failed to send OTP. Please check your email.', 'error');
       }
     } catch (err) {
-      setToast({ open: true, message: 'An error occurred', severity: 'error' });
+      showToast('An error occurred during OTP request.', 'error');
     }
   };
 
@@ -39,34 +45,55 @@ const ForgotPasswordPage = () => {
     try {
       const result = await verifyOTP({ email, otp });
       if (result.success) {
-        setToast({ open: true, message: 'OTP verified', severity: 'success' });
+        showToast('OTP verified successfully', 'success');
         setStep(3);
       } else {
-        setToast({ open: true, message: 'Invalid OTP', severity: 'error' });
+        showToast(result.message || 'Invalid or expired OTP. Please try again.', 'error');
       }
     } catch (err) {
-      setToast({ open: true, message: 'An error occurred', severity: 'error' });
+      showToast('An error occurred during OTP verification.', 'error');
     }
   };
 
   // Step 3: set new password
   const handleResetPassword = async (e) => {
     e.preventDefault();
+
+    // 1. Password match check
     if (newPassword !== confirmPassword) {
-      setToast({ open: true, message: 'Passwords do not match', severity: 'error' });
+      showToast('Passwords do not match', 'error');
       return;
     }
 
+    // 2. Password complexity check (Assuming same rules as signup)
+    const passwordRules =
+      /[a-z]/.test(newPassword) &&
+      /[A-Z]/.test(newPassword) &&
+      /[0-9]/.test(newPassword) &&
+      /[^A-Za-z0-9]/.test(newPassword) &&
+      newPassword.length >= 8;
+
+    if (!passwordRules) {
+      showToast(
+        'Password must have uppercase, lowercase, number, special character and be minimum 8 characters',
+        'error'
+      );
+      return;
+    }
+
+    // 3. API Call
     try {
+      // Backend expects { email, newPassword }
       const result = await resetPassword({ email, newPassword });
+
       if (result.success) {
-        setToast({ open: true, message: 'Password updated successfully', severity: 'success' });
+        showToast('Password updated successfully! Redirecting to login.', 'success');
         navigate('/login');
       } else {
-        setToast({ open: true, message: 'Failed to reset password', severity: 'error' });
+        showToast(result.message || 'Failed to reset password. Please try again.', 'error');
       }
     } catch (err) {
-      setToast({ open: true, message: 'An error occurred', severity: 'error' });
+      showToast('An error occurred during password reset.', 'error');
     }
   };
 
@@ -77,7 +104,7 @@ const ForgotPasswordPage = () => {
           <h1 className="text-2xl font-semibold">Forgot Password</h1>
           <p className="text-sm text-muted">
             {step === 1 && 'Enter your email to receive an OTP'}
-            {step === 2 && 'Enter the OTP sent to your email'}
+            {step === 2 && `Enter the OTP sent to ${email}`}
             {step === 3 && 'Set a new password for your account'}
           </p>
         </div>
@@ -106,7 +133,7 @@ const ForgotPasswordPage = () => {
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
               required
-              placeholder="Enter the OTP"
+              placeholder="Enter the 6-digit OTP"
             />
             <Button type="submit" fullWidth loading={loading}>
               Verify OTP
@@ -123,6 +150,7 @@ const ForgotPasswordPage = () => {
               onChange={(e) => setNewPassword(e.target.value)}
               required
               placeholder="Enter new password"
+              helperText="Min 8 chars, including Uppercase, Lowercase, Number, and Special Char"
             />
             <Input
               label="Confirm Password"

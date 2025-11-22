@@ -9,6 +9,7 @@ import { useAuth } from '../../../context/AuthContext';
 import { APP_NAME } from '../../../constants';
 
 const SignupPage = () => {
+  // The signup function here should handle the Axios call internally.
   const { signup, loading } = useAuth();
   const navigate = useNavigate();
 
@@ -31,7 +32,9 @@ const SignupPage = () => {
 
     const { loginId, email, password, confirmPassword } = formData;
 
-    // match backend rule
+    // --- Client-Side Validation (Matching Backend Rules) ---
+
+    // 1. Login ID length check
     if (loginId.length < 6 || loginId.length > 12) {
       setToast({
         open: true,
@@ -41,12 +44,13 @@ const SignupPage = () => {
       return;
     }
 
+    // 2. Password match check
     if (password !== confirmPassword) {
       setToast({ open: true, message: 'Passwords do not match', severity: 'error' });
       return;
     }
 
-    // match backend rule
+    // 3. Password complexity check
     const passwordRules =
       /[a-z]/.test(password) &&
       /[A-Z]/.test(password) &&
@@ -63,23 +67,31 @@ const SignupPage = () => {
       return;
     }
 
+    // --- Signup API Call (via AuthContext) ---
     try {
+      // Call the signup function from AuthContext with necessary data
       const result = await signup({
         loginId,
         email,
         password,
+        // Note: role is usually set by the backend/defaults to 'staff' as per your backend code
       });
 
+      // The 'result' should contain { success: true, token, ... } if successful
       if (result.success) {
-        setToast({ open: true, message: 'Account created!', severity: 'success' });
+        setToast({ open: true, message: 'Account created! Redirecting...', severity: 'success' });
+        // Redirect to dashboard after successful signup and token storage
         navigate('/dashboard');
       } else {
+        // Handle success=false from context (if context handles errors gracefully)
         setToast({ open: true, message: result.message || 'Signup failed', severity: 'error' });
       }
     } catch (err) {
+      // Handle network errors or specific errors thrown by the context function
       setToast({
         open: true,
-        message: err?.response?.data?.message || 'An error occurred',
+        // Accessing message from nested response structure if available
+        message: err?.response?.data?.message || err?.message || 'An unexpected error occurred during signup',
         severity: 'error',
       });
     }
@@ -104,7 +116,7 @@ const SignupPage = () => {
             value={formData.loginId}
             onChange={handleChange}
             required
-            placeholder="Enter your login ID"
+            placeholder="Enter your login ID (6-12 characters)"
             autoFocus
           />
 
@@ -126,6 +138,7 @@ const SignupPage = () => {
             onChange={handleChange}
             required
             placeholder="Enter your password"
+            helperText="Min 8 chars, including Uppercase, Lowercase, Number, and Special Char"
           />
 
           <Input

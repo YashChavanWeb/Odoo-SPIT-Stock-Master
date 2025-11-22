@@ -12,6 +12,7 @@ const LoginPage = () => {
   const { login, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
   const redirectPath = location.state?.from?.pathname || '/dashboard';
 
   const [formData, setFormData] = useState({ loginId: '', password: '' });
@@ -33,19 +34,25 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
+
       const result = await login({
-        email: formData.loginId.includes('@') ? formData.loginId : `${formData.loginId}@inventory.com`,
+        loginId: formData.loginId,
         password: formData.password,
       });
 
       if (result.success) {
         setToast({ open: true, message: 'Welcome back!', severity: 'success' });
-        navigate(redirectPath, { replace: true });
+        navigate('/dashboard', { replace: true });
       } else {
-        setToast({ open: true, message: 'Invalid login credentials.', severity: 'error' });
+
+        setToast({ open: true, message: result.message || 'Invalid login credentials.', severity: 'error' });
       }
     } catch (err) {
-      setToast({ open: true, message: 'An error occurred. Please try again.', severity: 'error' });
+      setToast({
+        open: true,
+        message: err?.response?.data?.message || 'An error occurred. Please try again.',
+        severity: 'error'
+      });
     }
   };
 
@@ -64,12 +71,13 @@ const LoginPage = () => {
         {/* Form */}
         <form className="space-y-4" onSubmit={handleSubmit}>
           <Input
-            label="Login ID or Email"
+            label="Login ID"
             name="loginId"
             type="text"
             required
             value={formData.loginId}
             onChange={handleChange}
+            placeholder="Enter your login ID"
           />
           <Input
             label="Password"
@@ -78,6 +86,7 @@ const LoginPage = () => {
             required
             value={formData.password}
             onChange={handleChange}
+            placeholder="Enter your password"
           />
           <Button type="submit" loading={loading} fullWidth>
             Sign in
