@@ -9,17 +9,18 @@ export default {
     extend: {
       colors: {
         brand: {
-          50: '#edf7ff',
-          100: '#d7ecff',
-          200: '#b2daff',
-          300: '#7cc1ff',
-          400: '#3fa2ff',
-          500: '#1c7fe6',
-          600: '#0d61c2',
-          700: '#0a4da0',
-          800: '#0c4081',
-          900: '#0f3568',
+          50: '#fffbea',
+          100: '#fff3b8',
+          200: '#ffeb85',
+          300: '#ffe053',
+          400: '#ffd622',
+          500: '#FFD700',
+          600: '#e6c200',
+          700: '#bfa100',
+          800: '#998000',
+          900: '#7d6600',
         },
+        // NEUTRAL COLORS FOR BG / TEXT
         neutral: {
           50: '#f8fafc',
           100: '#f1f5f9',
@@ -40,4 +41,3 @@ export default {
   },
   plugins: [],
 };
-

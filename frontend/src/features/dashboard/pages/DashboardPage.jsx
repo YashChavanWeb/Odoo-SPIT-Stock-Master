@@ -6,16 +6,16 @@ import ReceiptsView from '../views/ReceiptsView';
 import DeliveryView from '../views/DeliveryView';
 
 const DashboardPage = () => {
-  const [activeView, setActiveView] = useState('dashboard'); // dashboard, receipts, delivery
+  const [activeView, setActiveView] = useState('dashboard');
 
   if (activeView === 'receipts') return <ReceiptsView onBack={() => setActiveView('dashboard')} />;
   if (activeView === 'delivery') return <DeliveryView onBack={() => setActiveView('dashboard')} />;
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
+      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <Grid container spacing={6} className="w-full">
+        <Grid item xs={12} sm={12} md={6} className="flex">
           <DashboardCard
             title="Receipts"
             highlightCount={4}
@@ -23,7 +23,7 @@ const DashboardPage = () => {
             onClick={() => setActiveView('receipts')}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} sm={12} md={6} className="flex">
           <DashboardCard
             title="Delivery"
             highlightCount={4}
@@ -32,6 +32,7 @@ const DashboardPage = () => {
           />
         </Grid>
       </Grid>
+
     </div>
   );
 };

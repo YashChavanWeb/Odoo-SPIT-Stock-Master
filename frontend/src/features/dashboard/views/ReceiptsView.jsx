@@ -26,7 +26,7 @@ const ReceiptsView = ({ onBack }) => {
       <div className="flex justify-between items-center">
         <Tooltip title="Back to previous page" arrow>
           <Button variant="ghost" onClick={onBack}>
-            <ion-icon name="arrow-back-outline" class="mr-2 text-yellow-300"></ion-icon>
+            <ion-icon name="arrow-back-outline" class="mr-2 dark:text-yellow-300 text-yellow-800"></ion-icon>
             Back
           </Button>
         </Tooltip>
@@ -39,7 +39,7 @@ const ReceiptsView = ({ onBack }) => {
               onClick={() => setViewMode('list')}
               variant={viewMode === 'list' ? 'contained' : 'outlined'}
             >
-              <ion-icon name="list-outline" size='large' class="mr-1 text-yellow-300"></ion-icon>
+              <ion-icon name="list-outline" size='large' class="mr-1 dark:text-yellow-300 text-yellow-800"></ion-icon>
               {/* List */}
             </Button>
           </Tooltip>
@@ -49,7 +49,7 @@ const ReceiptsView = ({ onBack }) => {
               onClick={() => setViewMode('kanban')}
               variant={viewMode === 'kanban' ? 'contained' : 'outlined'}
             >
-              <ion-icon name="calendar-clear-outline" size='large' class="mr-1 text-yellow-300"></ion-icon>
+              <ion-icon name="calendar-clear-outline" size='large' class="mr-1 dark:text-yellow-300 text-yellow-800"></ion-icon>
               {/* Kanban */}
             </Button>           
           </Tooltip>

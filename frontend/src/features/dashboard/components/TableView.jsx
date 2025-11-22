@@ -27,8 +27,8 @@ const statusColorMap = {
 const TableView = ({ data }) => {
   const { mode } = useThemeMode();
 
-  const headerBg = mode === 'dark' ? '#2A2A2A' : '#F5F5F5'; // subtle dark grey
-  const headerText = mode === 'dark' ? '#FFD966' : '#333';  // soft yellow
+  const headerBg = mode === 'dark' ? '#2A2A2A' : '#E5E5E5';
+  const headerText = mode === 'dark' ? '#FFD966' : '#4B3621';
 
   return (
     <Card className={`overflow-x-auto p-4 ${mode === 'dark' ? 'bg-black text-yellow-300' : 'bg-white text-gray-800'}`}>
@@ -65,9 +65,9 @@ const TableView = ({ data }) => {
                   <Tooltip title={row.status} arrow>
                     <span className="flex items-center gap-1 px-2 py-1 rounded-full font-medium justify-evenly"
                       style={{
-                        backgroundColor: mode === 'dark'
-                          ? `${statusColorMap[row.status]}33` // add alpha for dark mode
-                          : `${statusColorMap[row.status]}22`, // light alpha for light mode
+                        backgroundColor: mode === 'dark'  
+                          ? `${statusColorMap[row.status]}33` 
+                          : `${statusColorMap[row.status]}44`,  
                         color: statusColorMap[row.status],
                       }}
                     >

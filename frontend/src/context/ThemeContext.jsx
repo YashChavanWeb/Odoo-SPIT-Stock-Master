@@ -44,18 +44,18 @@ export const ThemeProviderWrapper = ({ children }) => {
         palette: {
           mode,
           primary: {
-            main: '#FFD700', // Yellow
+            main: '#FFD700',
           },
           secondary: {
-            main: '#808080', // Grey
+            main: '#808080',
           },
           background: {
-            default: mode === 'dark' ? '#000000' : '#f5f5f5', // black bg in dark
-            paper: mode === 'dark' ? '#1a1a1a' : '#ffffff', // cards dark grey
+            default: mode === 'dark' ? '#000000' : '#e5e5e5', // slightly darker grey
+            paper: mode === 'dark' ? '#1a1a1a' : '#fafafa', // lighter but not too white
           },
           text: {
-            primary: mode === 'dark' ? '#FFD700' : '#000000', // yellow text in dark
-            secondary: mode === 'dark' ? '#CCCCCC' : '#555555',
+            primary: mode === 'dark' ? '#FFD700' : '#000000',
+            secondary: mode === 'dark' ? '#CCCCCC' : '#333333',
           },
         },
         shape: { borderRadius: 12 },
