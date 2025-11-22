@@ -7,29 +7,12 @@ datasource db {
   provider = "postgresql"
 }
 
-model Payment {
-  id                String   @id @default(uuid())
-  razorpayOrderId   String
-  amount            Int
-  currency          String
-  status            String   @default("created")
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  
-  userId            Int
-  user              Users    @relation(fields: [userId], references: [id])
+model products {
+  id         String   @id @default(uuid())
+  name       String
+  sku        String   @unique // unique product code
+  category   String
+  unit       String // unit of measure
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
-
-model Users {
-  id        Int      @id @default(autoincrement())
-  name      String?
-  email     String   @unique
-  password  String
-  role      String   @default("user")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-  
-  payments  Payment[]
-}
-
-

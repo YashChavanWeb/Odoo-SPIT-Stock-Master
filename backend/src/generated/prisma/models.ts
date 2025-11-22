@@ -8,6 +8,5 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Payment.ts'
-export type * from './models/Users.ts'
+export type * from './models/products.ts'
 export type * from './commonInputTypes.ts'
