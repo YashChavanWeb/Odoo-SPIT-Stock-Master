@@ -24,14 +24,15 @@ const statusColorMap = {
   Cancelled: '#EF4444',  // red-500
 };
 
-const TableView = ({ data }) => {
+const TableView = ({ data , onRowClick }) => {
   const { mode } = useThemeMode();
 
   const headerBg = mode === 'dark' ? '#2A2A2A' : '#E5E5E5';
   const headerText = mode === 'dark' ? '#FFD966' : '#4B3621';
+  const rowText = mode === 'dark' ? '#FFFFFF' : '#000000'; // <-- row text color
 
   return (
-    <Card className={`overflow-x-auto p-4 ${mode === 'dark' ? 'bg-black text-yellow-300' : 'bg-white text-gray-800'}`}>
+    <Card className={`overflow-x-auto p-4 ${mode === 'dark' ? 'bg-black' : 'bg-white'}`}>
       <Table>
         <TableHead>
           <TableRow style={{ backgroundColor: headerBg }}>
@@ -54,13 +55,14 @@ const TableView = ({ data }) => {
               <TableRow
                 key={idx}
                 className="hover:bg-yellow-50 dark:hover:bg-gray-800 transition-colors"
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: 'pointer', color: rowText }} // <-- set row text color
+                onClick={() => onRowClick(row)}
               >
-                <TableCell>{row.reference}</TableCell>
-                <TableCell>{row.from}</TableCell>
-                <TableCell>{row.to}</TableCell>
-                <TableCell>{row.contact}</TableCell>
-                <TableCell>{row.scheduleDate}</TableCell>
+                <TableCell style={{ color: rowText }}>{row.reference}</TableCell>
+                <TableCell style={{ color: rowText }}>{row.from}</TableCell>
+                <TableCell style={{ color: rowText }}>{row.to}</TableCell>
+                <TableCell style={{ color: rowText }}>{row.contact}</TableCell>
+                <TableCell style={{ color: rowText }}>{row.scheduleDate}</TableCell>
                 <TableCell>
                   <Tooltip title={row.status} arrow>
                     <span className="flex items-center gap-1 px-2 py-1 rounded-full font-medium justify-evenly"
