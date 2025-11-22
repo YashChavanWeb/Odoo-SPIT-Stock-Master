@@ -1,3 +1,4 @@
+import { getCache, setCache } from '../utils/cache.js';
 import { prisma } from '../utils/prisma.js';
 
 export const createReceipt = async (req, res) => {
@@ -175,10 +176,13 @@ export const updateReceiptStatus = async (req, res) => {
 
 export const getReceipts = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
+    const page = parseInt(req.query.page, 10);
+    if (isNaN(page) || page <= 0) {
+      return res.status(400).json({ message: 'Invalid page number' });
+    }
+
     const limit = 10;
     const skip = (page - 1) * limit;
-
     const cacheKey = `receipts:page:${page}`;
 
     const cachedReceipts = await getCache(cacheKey);
@@ -221,7 +225,8 @@ export const getReceipts = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error('Error fetching receipts:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
