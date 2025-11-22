@@ -26,6 +26,7 @@ model Products {
   created_at DateTime   @default(now())
   updated_at DateTime   @updatedAt
   receipts   Receipts[] @relation("ReceiptProducts")
+  stocks     Stock[]
 }
 
 model Warehouses {
@@ -49,6 +50,18 @@ model Receipts {
   created_at    DateTime      @default(now())
   updated_at    DateTime      @updatedAt
   products      Products[]    @relation("ReceiptProducts")
+}
+
+model Stock {
+  id          String   @id @default(uuid())
+  product     Products @relation(fields: [productId], references: [id])
+  productId   String
+  perUnitCost Float
+  quantity    Int
+  freeToUse   Int
+  onHand      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 // New Enum definition
