@@ -5,15 +5,33 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-
 }
 
 model Users {
+  id        String   @id @default(uuid())
+  loginId   String   @unique
+  email     String   @unique
+  password  String
+  role      String   @default("staff") // manager or staff
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model products {
   id         String   @id @default(uuid())
-  loginId    String   @unique
-  email      String   @unique
-  password   String
-  role       String   @default("staff") // manager or staff
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  name       String
+  sku        String   @unique // unique product code
+  category   String
+  unit       String // unit of measure
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model warehouses {
+  id         String   @id @default(uuid())
+  name       String
+  shortCode  String   @unique // 2–3 uppercase letters (e.g., WH, MNL)
+  address    String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
