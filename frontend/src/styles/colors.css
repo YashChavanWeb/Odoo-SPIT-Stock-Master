@@ -1,0 +1,42 @@
+:root {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --color-bg: 248, 250, 252;
+  --color-card: 255, 255, 255;
+  --color-text: 15, 23, 42;
+  --color-muted: 100, 116, 139;
+
+  --brand-50: #edf7ff;
+  --brand-100: #d7ecff;
+  --brand-200: #b2daff;
+  --brand-300: #7cc1ff;
+  --brand-400: #3fa2ff;
+  --brand-500: #1c7fe6;
+  --brand-600: #0d61c2;
+  --brand-700: #0a4da0;
+  --brand-800: #0c4081;
+  --brand-900: #0f3568;
+
+  --neutral-50: #f8fafc;
+  --neutral-100: #f1f5f9;
+  --neutral-200: #e2e8f0;
+  --neutral-300: #cbd5f5;
+  --neutral-400: #94a3b8;
+  --neutral-500: #64748b;
+  --neutral-600: #475569;
+  --neutral-700: #334155;
+  --neutral-800: #1e293b;
+  --neutral-900: #0f172a;
+}
+
+.dark {
+  --color-bg: 15, 23, 42;
+  --color-card: 30, 41, 59;
+  --color-text: 248, 250, 252;
+  --color-muted: 148, 163, 184;
+}
+

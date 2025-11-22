@@ -1,0 +1,1 @@
+# Stock Master - Odoo x SPIT Hackathon 
