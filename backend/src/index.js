@@ -8,7 +8,7 @@ dotenv.config({ path: './src/.env' });
 
 // routes
 import authRouter from './auth/auth.route.js';
-import paymentRouter from './payment/payment.routes.js';
+// import paymentRouter from './payment/payment.routes.js';
 import userRouter from './users/user.routes.js';
 
 const app = express();
@@ -37,7 +37,7 @@ app.get('/health', async (req, res) => {
 
 // routes
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/payment', paymentRouter);
+// app.use('/api/v1/payment', paymentRouter);
 app.use('/api/v1/users', userRouter);
 
 app.listen(port, async () => {
